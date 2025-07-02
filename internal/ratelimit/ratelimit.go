@@ -25,7 +25,7 @@ type RateLimitStats struct {
 
 // NewRateLimiter creates a new rate limiter
 func NewRateLimiter(rps float64, logger *logrus.Logger) *RateLimiter {
-	burst := max(int(rps) + 1, 1)
+	burst := max(int(rps)+1, 1)
 
 	return &RateLimiter{
 		limiter: rate.NewLimiter(rate.Limit(rps), burst),
