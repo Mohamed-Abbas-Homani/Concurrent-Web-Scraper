@@ -31,3 +31,18 @@ fmt:
 clean:
 	@echo "🧹 Cleaning up..."
 	@rm -rf bin
+
+# Docker image name
+IMAGE_NAME=go-scraper
+
+# Build Docker image
+.PHONY: docker-build
+docker-build:
+	@echo "🐳 Building Docker image..."
+	@docker build -t $(IMAGE_NAME) .
+
+# Run Docker container
+.PHONY: docker-run
+docker-run:
+	@echo "🚀 Running Docker container..."
+	@docker run --rm $(IMAGE_NAME)
