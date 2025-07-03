@@ -11,15 +11,14 @@ import (
 // DefaultConfig returns a default configuration
 func DefaultConfig() *types.ScraperConfig {
 	return &types.ScraperConfig{
-		MaxConcurrency:   5,
-		RateLimit:        2.0,
-		Timeout:          30 * time.Second,
-		RetryAttempts:    3,
-		RetryDelay:       2 * time.Second,
-		CacheTTL:         10 * time.Minute,
-		UserAgent:        "WebScraper/1.0 (+https://example.com/bot)",
-		RespectRobotsTxt: true,
-		MaxBodySize:      10 * 1024 * 1024, // 10MB
+		MaxConcurrency: 5,
+		RateLimit:      2.0,
+		Timeout:        30 * time.Second,
+		RetryAttempts:  3,
+		RetryDelay:     2 * time.Second,
+		CacheTTL:       10 * time.Minute,
+		UserAgent:      "WebScraper/1.0 (+https://example.com/bot)",
+		MaxBodySize:    10 * 1024 * 1024, // 10MB
 	}
 }
 
