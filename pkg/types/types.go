@@ -34,13 +34,13 @@ type CacheEntry struct {
 // ScraperConfig holds configuration for the web scraper
 type ScraperConfig struct {
 	MaxConcurrency int           `json:"max_concurrency"`
-	RateLimit      float64       `json:"rate_limit"` // requests per second
+	RateLimit      float64       `json:"rate_limit"`
 	Timeout        time.Duration `json:"timeout"`
 	RetryAttempts  int           `json:"retry_attempts"`
 	RetryDelay     time.Duration `json:"retry_delay"`
 	CacheTTL       time.Duration `json:"cache_ttl"`
 	UserAgent      string        `json:"user_agent"`
-	MaxBodySize    int64         `json:"max_body_size"` // in bytes
+	MaxBodySize    int64         `json:"max_body_size"`
 }
 
 // ResultProcessor interface for handling scraping results
