@@ -9,7 +9,6 @@ type ScrapingTask struct {
 	URL       string            `json:"url"`
 	Selectors map[string]string `json:"selectors"`
 	ID        string            `json:"id"`
-	Priority  int               `json:"priority"`
 	Headers   map[string]string `json:"headers,omitempty"`
 	Method    string            `json:"method,omitempty"`
 }

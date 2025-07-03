@@ -5,7 +5,7 @@ BINARY_NAME=bin/scraper
 
 # Default target: clean -> fmt -> test -> build
 .PHONY: all
-all: clean fmt test build
+all: clean fmt proto test build
 
 # Build the binary
 .PHONY: build
@@ -44,5 +44,17 @@ docker-build:
 # Run Docker container
 .PHONY: docker-run
 docker-run:
-	@echo "🚀 Running Docker container..."
-	@docker run --rm $(IMAGE_NAME)
+	@echo "🚀 Running Docker container on ports 8080 (gRPC) and 8081 (HTTP)..."
+	@docker run --rm -p 8080:8080 -p 8081:8081 $(IMAGE_NAME)
+
+PROTO_DIR := pkg/types/proto
+PROTO_FILES := $(PROTO_DIR)/scraper.proto
+OUT_DIR := $(PROTO_DIR)
+
+.PHONY: proto
+proto:
+	protoc \
+	  --proto_path=$(PROTO_DIR) \
+	  --go_out=$(OUT_DIR) --go_opt=paths=source_relative \
+	  --go-grpc_out=$(OUT_DIR) --go-grpc_opt=paths=source_relative \
+	  $(PROTO_FILES)

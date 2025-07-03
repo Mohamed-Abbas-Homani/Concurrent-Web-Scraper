@@ -25,7 +25,7 @@ type WebScraper struct {
 	httpClient  *http.Client
 	logger      *logrus.Logger
 	taskQueue   chan *types.ScrapingTask
-	resultQueue chan *types.ScrapingResult
+	results     sync.Map
 	wg          sync.WaitGroup
 	ctx         context.Context
 	cancel      context.CancelFunc
@@ -66,12 +66,11 @@ func NewWebScraper(config *types.ScraperConfig) *WebScraper {
 				DisableCompression:  false,
 			},
 		},
-		logger:      logger,
-		taskQueue:   make(chan *types.ScrapingTask, config.MaxConcurrency*2),
-		resultQueue: make(chan *types.ScrapingResult, config.MaxConcurrency*2),
-		ctx:         ctx,
-		cancel:      cancel,
-		stats:       ScraperStats{},
+		logger:    logger,
+		taskQueue: make(chan *types.ScrapingTask, config.MaxConcurrency*2),
+		ctx:       ctx,
+		cancel:    cancel,
+		stats:     ScraperStats{},
 	}
 
 	return scraper
@@ -97,7 +96,6 @@ func (ws *WebScraper) Stop() error {
 	ws.cancel()
 	close(ws.taskQueue)
 	ws.wg.Wait()
-	close(ws.resultQueue)
 	ws.logger.Info("Web scraper stopped")
 	return nil
 }
@@ -123,9 +121,19 @@ func (ws *WebScraper) AddTask(task *types.ScrapingTask) error {
 	}
 }
 
-// GetResults returns the result channel
-func (ws *WebScraper) GetResults() <-chan *types.ScrapingResult {
-	return ws.resultQueue
+// GetResultsByIds returns the results by ids
+func (ws *WebScraper) GetResultsByIds(taskIds []string) []*types.ScrapingResult {
+	results := make([]*types.ScrapingResult, 0, len(taskIds))
+
+	for _, id := range taskIds {
+		if val, ok := ws.results.Load(id); ok {
+			if result, ok := val.(*types.ScrapingResult); ok {
+				results = append(results, result)
+			}
+		}
+	}
+
+	return results
 }
 
 // GetStats returns scraper statistics
@@ -157,12 +165,8 @@ func (ws *WebScraper) worker(workerID int) {
 
 			result := ws.processTask(task, logger)
 
-			select {
-			case ws.resultQueue <- result:
-			case <-ws.ctx.Done():
-				logger.Info("Worker interrupted during result send")
-				return
-			}
+			// Store result in concurrent map
+			ws.results.Store(result.TaskID, result)
 
 		case <-ws.ctx.Done():
 			logger.Info("Worker interrupted")
