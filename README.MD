@@ -19,20 +19,75 @@ A high-performance, configurable microservice for concurrent web scraping. It ex
 
 ---
 
+## 📸 Screenshots
+
+### 🖥️ Web Interface
+
+![Web Interface](screenshots/web.png)
+
+---
+
+### 📡 gRPC Testing (e.g., with `grpcurl` or Postman)
+
+![gRPC API](screenshots/grpc.png)
+
+---
+
+### 🌐 Echo Server – REST API in Browser
+
+![Echo Server](screenshots/echo.png)
+
+---
+
+### 🧰 CLI Output
+
+![CLI Output](screenshots/cli.png)
+
+---
+
 ## 🧱 Project Structure
 
 ```
 .
-├── cmd/                # Entry point of the scraper
-├── internal/
-│   ├── config/         # Configuration loader and defaults
-│   ├── scraper/        # Scraper core logic
-│   └── server/         # gRPC and Echo server implementations
-├── pkg/types/          # Shared types, config, and protobuf definitions
-│   └── proto/          # .proto files for gRPC
-├── bin/                # Compiled binary output
-├── Makefile            # Build, test, proto generation
-└── README.md           # You're here!
+├── Dockerfile
+├── Makefile
+├── README.MD
+├── bin
+│   └── scraper
+├── cmd
+│   └── scraper
+│       └── main.go
+├── config.json
+├── go.mod
+├── go.sum
+├── internal
+│   ├── cache
+│   │   └── cache.go
+│   ├── config
+│   │   └── config.go
+│   ├── ratelimit
+│   │   └── ratelimit.go
+│   ├── scraper
+│   │   └── scraper.go
+│   └── server
+│       ├── grpc.go
+│       └── http.go
+├── pkg
+│   └── types
+│       ├── proto
+│       └── types.go
+├── screenshots
+│   ├── cli.png
+│   ├── echo.png
+│   ├── grpc.png
+│   └── web.png
+├── test
+│   ├── echo_server_test.go
+│   ├── grpc_server_test.go
+│   └── scraper_test.go
+└── web
+    └── index.html
+
 ```
 
 ---
@@ -72,7 +127,6 @@ make docker-run
 
   * `AddTask(ScrapingTask)`
   * `GetResults(Empty)`
-  * `GetStatistics(Empty)`
 
 > Define your gRPC client using `pkg/types/proto/scraper.proto`
 
@@ -80,7 +134,6 @@ make docker-run
 
 * `POST /tasks` – Add new scraping task
 * `GET /results` – Get completed results
-* `GET /stats` – Fetch runtime statistics
 
 ---
 
