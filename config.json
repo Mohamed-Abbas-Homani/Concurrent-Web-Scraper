@@ -1,0 +1,11 @@
+{
+  "max_concurrency": 10,
+  "rate_limit": 2.5,
+  "timeout": 10000000000,
+  "retry_attempts": 3,
+  "retry_delay": 2000000000,
+  "cache_ttl": 300000000000,
+  "user_agent": "MyCustomScraper/1.0 (+https://example.com)",
+  "respect_robots_txt": true,
+  "max_body_size": 1048576
+}

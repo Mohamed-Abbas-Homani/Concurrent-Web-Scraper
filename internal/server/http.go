@@ -84,16 +84,18 @@ func (s *EchoServer) GetResultsByIds(c echo.Context) error {
 func StartEchoServer(scraper *scraper.WebScraper) error {
 	e := echo.New()
 
-	// Middleware
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORS())
 
 	server := NewEchoServer(scraper)
 
-	// Routes
+	// API routes
 	e.POST("/tasks", server.AddTasks)
 	e.GET("/results", server.GetResultsByIds)
+
+	// Serve HTML UI
+	e.Static("/", "web")
 
 	addr := ":8081"
 	return e.Start(addr)

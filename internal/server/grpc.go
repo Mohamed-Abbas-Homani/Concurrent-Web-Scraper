@@ -87,15 +87,15 @@ func StartGRPCServer(scraper *scraper.WebScraper) error {
 	reflection.Register(s)
 
 	asciiArt := `
-	
- _____ ____  ____  ____ 
+
+_____ ____  ____  ____ 
 /  __//  __\/  __\/   _\
 | |  _|  \/||  \/||  /  
 | |_//|    /|  __/|  \__
 \____\\_/\_\\_/   \____/
 
 gRPC server listening on %s
-`
+	`
 
 	log.Printf(asciiArt, addr)
 
